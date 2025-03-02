@@ -16,6 +16,7 @@ async fn main() {
     let pwd = var("POSTGRES_PWD").expect("The `POSTGRES_PWD` env variable is missing");
     let db = var("POSTGRES_DB").expect("The `POSTGRES_DB` env variable is missing");
     let size_s = var("POSTGRES_POOL").expect("The `POSTGRES_POOL` env variable is missing");
+    let server_port = var("APP_PORT").expect("The `APP_PORT` env variable is missing");
     let size = size_s.parse::<usize>().unwrap();
 
     let pool_cfg = deadpool_postgres::PoolConfig::new(size);
@@ -38,10 +39,10 @@ async fn main() {
         .with_state(pool);
 
     // Bind the server to the configured port.
-    let listener = match tokio::net::TcpListener::bind(format!("0.0.0.0:{}", 8080)).await {
+    let listener = match tokio::net::TcpListener::bind(format!("0.0.0.0:{}", server_port)).await {
         Ok(listener) => listener,
         Err(err) => {
-            eprintln!("Failed to bind to port {}: {:?}", 8080, err);
+            eprintln!("Failed to bind to port {}: {:?}", server_port, err);
             return;
         }
     };

@@ -8,7 +8,7 @@ use axum::{
 use crate::device::{Device, DeviceData, DeviceSchema};
 
 use axum::extract::State;
-use chrono::{DateTime, NaiveDateTime, Utc};
+use chrono::{NaiveDateTime, Utc};
 use deadpool_postgres::{GenericClient, Pool};
 use uuid::Uuid;
 

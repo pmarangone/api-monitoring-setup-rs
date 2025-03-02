@@ -1,11 +1,16 @@
 # Stage 1: Build Stage
-FROM rust:1.75 AS builder
+FROM rust:1.75-alpine AS builder
 
 # Set the working directory
 WORKDIR /app
 
-# Install system dependencies required for building
-RUN apt-get update && apt-get install -y pkg-config libpq-dev && rm -rf /var/lib/apt/lists/*
+# Install dependencies
+RUN apk update && apk add --no-cache \
+    pkgconf \
+    libpq-dev \
+    gcc \
+    musl-dev \
+    make
 
 # Cache dependencies
 COPY Cargo.toml Cargo.lock ./
@@ -17,10 +22,10 @@ COPY src ./src
 RUN cargo build --release
 
 # Stage 2: Runtime Stage
-FROM debian:bullseye-slim
+FROM alpine:latest
 
-# Install only necessary runtime dependencies
-RUN apt-get update && apt-get install -y libpq-dev && rm -rf /var/lib/apt/lists/*
+# Install necessary runtime dependencies
+RUN apk update && apk add --no-cache libpq-dev
 
 # Set the working directory
 WORKDIR /app
