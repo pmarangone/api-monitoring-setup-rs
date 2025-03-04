@@ -1,9 +1,9 @@
-name: prometheus-monitoring-rust
+name: prometheus-monitoring-rust-v2
 
 services:
     prometheus:
       image: docker.io/prom/prometheus:v3.1.0 # Changed to 'latest' for simplicity or specify a desired version
-      container_name: prom-rs
+      container_name: prom-rs-v2
       ports:
         - 9090:9090
       command: "--config.file=/etc/prometheus/prometheus.yaml --storage.tsdb.path=/prometheus" # Added storage path
@@ -16,7 +16,7 @@ services:
 
     grafana:
       image: docker.io/grafana/grafana-oss:11.5.1
-      container_name: graf-rs
+      container_name: graf-rs-v2
       ports:
         - "3000:3000"
       volumes:
@@ -29,7 +29,7 @@ services:
       build:
         context: ./
         dockerfile: Dockerfile
-      container_name: server-rs
+      container_name: server-rs-v2
       ports:
         - "8000:8000"
       env_file:
