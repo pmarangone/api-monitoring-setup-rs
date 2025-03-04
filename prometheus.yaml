@@ -3,4 +3,4 @@ scrape_configs:
   - job_name: "rust-monitoring"
     scrape_interval: 5s
     static_configs:
-      - targets: ["rust-monitoring:8000"]
+      - targets: ["server-rs:8000"]

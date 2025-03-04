@@ -1,45 +1,46 @@
-name: prometheus-monitoring4
+name: prometheus-monitoring-rust
+
 services:
     prometheus:
       image: docker.io/prom/prometheus:v3.1.0 # Changed to 'latest' for simplicity or specify a desired version
-      container_name: prometheus-v05
+      container_name: prom-rs
       ports:
         - 9090:9090
       command: "--config.file=/etc/prometheus/prometheus.yaml --storage.tsdb.path=/prometheus" # Added storage path
       volumes:
         - ./prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
-        - prometheus:/prometheus
+        - prometheus-rs:/prometheus
       restart: unless-stopped
       networks:
-        - monitoring-network
+        - monitoring-network-rs
 
     grafana:
       image: docker.io/grafana/grafana-oss:11.5.1
-      container_name: grafana-v05
+      container_name: graf-rs
       ports:
         - "3000:3000"
       volumes:
-        - grafana:/var/lib/grafana
+        - grafana-rs:/var/lib/grafana
       restart: unless-stopped
       networks:
-        - monitoring-network
+        - monitoring-network-rs
 
     rust-monitoring:
       build:
         context: ./
         dockerfile: Dockerfile
-      container_name: rust-monitoring-server-v05
+      container_name: server-rs
       ports:
         - "8000:8000"
       env_file:
-      - .env
+        - .env
       networks:
-        - monitoring-network
+        - monitoring-network-rs
 
 volumes:
-  prometheus:
-  grafana:
+  prometheus-rs:
+  grafana-rs:
 
 networks:
-  monitoring-network:
+  monitoring-network-rs:
     driver: bridge
